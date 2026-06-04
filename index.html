@@ -8,143 +8,133 @@
 <meta name="apple-mobile-web-app-title" content="板金PRO">
 <meta name="theme-color" content="#ff6b2b">
 <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon.svg">
 <title>BANKIN PRO</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@400;700;900&display=swap');
   :root {
-    --bg:#0d0d0f; --surface:#18181c; --surface2:#222228;
-    --accent:#ff6b2b; --accent2:#ffb347; --text:#f0f0f0;
-    --muted:#888; --green:#2ecc71; --red:#e74c3c; --border:#2e2e36;
-    --safe-top: env(safe-area-inset-top, 0px);
-    --safe-bot: env(safe-area-inset-bottom, 0px);
+    --bg:#0d0d0f;--surface:#18181c;--surface2:#222228;
+    --accent:#ff6b2b;--accent2:#ffb347;--text:#f0f0f0;
+    --muted:#888;--green:#2ecc71;--red:#e74c3c;--border:#2e2e36;
+    --safe-top:env(safe-area-inset-top,0px);
+    --safe-bot:env(safe-area-inset-bottom,0px);
   }
-  * { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
-  html,body { height:100%; overflow:hidden; }
-  body {
-    background:var(--bg); color:var(--text);
-    font-family:'Noto Sans JP',sans-serif;
-    display:flex; flex-direction:column;
-  }
-  /* ヘッダー */
-  header {
-    background:linear-gradient(135deg,#1a1a20,#0d0d0f);
-    border-bottom:2px solid var(--accent);
-    padding:calc(var(--safe-top) + 10px) 20px 10px;
-    flex-shrink:0;
-  }
-  .logo { font-family:'Bebas Neue',cursive; font-size:24px; color:var(--accent); letter-spacing:2px; }
-  .sub { font-size:10px; color:var(--muted); letter-spacing:1px; }
-  /* タブ */
-  .tabs {
-    display:flex; border-bottom:1px solid var(--border);
-    background:var(--surface); flex-shrink:0;
-  }
-  .tab {
-    flex:1; padding:10px 4px; text-align:center; font-size:11px;
-    font-weight:700; color:var(--muted); cursor:pointer;
-    border-bottom:3px solid transparent; transition:all 0.2s;
-    user-select:none;
-  }
-  .tab.active { color:var(--accent); border-bottom-color:var(--accent); background:var(--surface2); }
-  /* スクロール可能エリア */
-  .pages { flex:1; overflow:hidden; position:relative; }
-  .page {
-    display:none; position:absolute; inset:0;
-    overflow-y:auto; padding:16px;
-    padding-bottom:calc(var(--safe-bot) + 16px);
-    -webkit-overflow-scrolling:touch;
-  }
-  .page.active { display:block; }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  html,body{height:100%;overflow:hidden;}
+  body{background:var(--bg);color:var(--text);font-family:'Noto Sans JP',sans-serif;display:flex;flex-direction:column;}
+  header{background:linear-gradient(135deg,#1a1a20,#0d0d0f);border-bottom:2px solid var(--accent);padding:calc(var(--safe-top) + 10px) 16px 10px;flex-shrink:0;}
+  .header-row{display:flex;justify-content:space-between;align-items:center;}
+  .logo{font-family:'Bebas Neue',cursive;font-size:24px;color:var(--accent);letter-spacing:2px;}
+  .sub{font-size:10px;color:var(--muted);}
+  .user-badge{background:var(--surface2);border:1px solid var(--accent);border-radius:20px;padding:5px 12px;font-size:12px;font-weight:700;color:var(--accent);cursor:pointer;}
+  .tabs{display:flex;border-bottom:1px solid var(--border);background:var(--surface);flex-shrink:0;}
+  .tab{flex:1;padding:10px 4px;text-align:center;font-size:11px;font-weight:700;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;transition:all 0.2s;user-select:none;}
+  .tab.active{color:var(--accent);border-bottom-color:var(--accent);background:var(--surface2);}
+  .pages{flex:1;overflow:hidden;position:relative;}
+  .page{display:none;position:absolute;inset:0;overflow-y:auto;padding:14px;padding-bottom:calc(var(--safe-bot) + 16px);-webkit-overflow-scrolling:touch;}
+  .page.active{display:block;}
+
+  /* 名前入力画面 */
+  #name-screen{position:fixed;inset:0;background:var(--bg);z-index:1000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;}
+  .name-logo{font-family:'Bebas Neue',cursive;font-size:48px;color:var(--accent);letter-spacing:4px;margin-bottom:8px;}
+  .name-sub{font-size:13px;color:var(--muted);margin-bottom:40px;}
+  .name-input{width:100%;background:var(--surface2);border:2px solid var(--accent);border-radius:14px;padding:16px;color:var(--text);font-size:20px;font-family:'Noto Sans JP',sans-serif;outline:none;text-align:center;margin-bottom:16px;}
+  .name-btn{width:100%;padding:16px;border-radius:14px;border:none;font-size:16px;font-weight:700;font-family:'Noto Sans JP',sans-serif;cursor:pointer;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;}
 
   /* ダッシュボード */
-  .goal-card { background:linear-gradient(135deg,var(--surface2),#1e1e28); border:1px solid var(--accent); border-radius:16px; padding:20px; margin-bottom:16px; }
-  .goal-label { font-size:11px; color:var(--accent); letter-spacing:2px; margin-bottom:8px; font-weight:700; }
-  .countdown-display { font-family:'Bebas Neue',cursive; font-size:52px; color:var(--text); line-height:1; margin:8px 0 4px; }
-  .countdown-display.over { color:var(--green); }
-  .countdown-sub { font-size:12px; color:var(--muted); }
-  .progress-wrap { background:var(--border); border-radius:8px; height:10px; margin-top:14px; overflow:hidden; }
-  .progress-bar { height:100%; background:linear-gradient(90deg,var(--accent),var(--accent2)); border-radius:8px; transition:width 0.5s ease; }
-  .progress-bar.over { background:linear-gradient(90deg,var(--green),#27ae60); }
-  .stats-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px; }
-  .stat-box { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:14px; }
-  .stat-box .label { font-size:10px; color:var(--muted); margin-bottom:4px; }
-  .stat-box .value { font-family:'Bebas Neue',cursive; font-size:28px; color:var(--accent2); line-height:1; }
-  .stat-box .unit { font-size:11px; color:var(--muted); }
-  .today-label { font-size:11px; color:var(--muted); text-align:center; margin-bottom:16px; }
+  .goal-card{background:linear-gradient(135deg,var(--surface2),#1e1e28);border:1px solid var(--accent);border-radius:16px;padding:18px;margin-bottom:14px;}
+  .goal-label{font-size:11px;color:var(--accent);letter-spacing:2px;margin-bottom:6px;font-weight:700;}
+  .countdown-display{font-family:'Bebas Neue',cursive;font-size:48px;color:var(--text);line-height:1;margin:6px 0 4px;}
+  .countdown-display.over{color:var(--green);}
+  .countdown-sub{font-size:12px;color:var(--muted);}
+  .progress-wrap{background:var(--border);border-radius:8px;height:8px;margin-top:12px;overflow:hidden;}
+  .progress-bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:8px;transition:width 0.5s;}
+  .progress-bar.over{background:linear-gradient(90deg,var(--green),#27ae60);}
+  .stats-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+  .stat-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px;}
+  .stat-box .label{font-size:10px;color:var(--muted);margin-bottom:4px;}
+  .stat-box .value{font-family:'Bebas Neue',cursive;font-size:26px;color:var(--accent2);line-height:1;}
+  .stat-box .unit{font-size:11px;color:var(--muted);}
+  .today-label{font-size:11px;color:var(--muted);text-align:center;margin-bottom:14px;}
 
-  /* グラフ */
-  .chart-card { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:16px; margin-bottom:16px; }
-  .chart-title { font-size:12px; font-weight:700; color:var(--accent); margin-bottom:12px; letter-spacing:1px; }
-  .chart-toggle { display:flex; gap:6px; margin-bottom:12px; }
-  .ct-btn { flex:1; padding:7px; border-radius:8px; border:1px solid var(--border); background:var(--surface2); color:var(--muted); font-size:11px; cursor:pointer; font-family:'Noto Sans JP',sans-serif; font-weight:700; transition:all 0.2s; }
-  .ct-btn.active { background:var(--accent); color:#fff; border-color:var(--accent); }
-  canvas { width:100% !important; display:block; }
-  .legend { display:flex; gap:16px; justify-content:center; margin-top:10px; }
-  .legend-item { display:flex; align-items:center; gap:5px; font-size:10px; color:var(--muted); }
-  .legend-dot { width:10px; height:10px; border-radius:50%; }
+  /* チームランキング */
+  .team-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px;margin-bottom:14px;}
+  .team-title{font-size:12px;font-weight:700;color:var(--accent);margin-bottom:12px;letter-spacing:1px;}
+  .team-item{display:flex;align-items:center;gap:10px;padding:10px;background:var(--surface2);border-radius:10px;margin-bottom:8px;}
+  .team-rank{font-family:'Bebas Neue',cursive;font-size:22px;color:var(--muted);min-width:28px;}
+  .team-rank.gold{color:#FFD700;}
+  .team-rank.silver{color:#C0C0C0;}
+  .team-rank.bronze{color:#CD7F32;}
+  .team-name{flex:1;font-size:13px;font-weight:700;}
+  .team-name.me{color:var(--accent);}
+  .team-amount{font-family:'Bebas Neue',cursive;font-size:20px;color:var(--accent2);}
+  .team-achieved{font-size:10px;color:var(--green);margin-left:4px;}
 
   /* 入力 */
-  .form-card { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:20px; margin-bottom:16px; }
-  .form-title { font-size:13px; font-weight:700; color:var(--accent); margin-bottom:16px; letter-spacing:1px; }
-  .input-group { margin-bottom:14px; }
-  .input-group label { display:block; font-size:11px; color:var(--muted); margin-bottom:6px; letter-spacing:1px; }
-  .input-group input { width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:14px; color:var(--text); font-size:16px; font-family:'Noto Sans JP',sans-serif; outline:none; transition:border-color 0.2s; }
-  .input-group input:focus { border-color:var(--accent); }
-  .btn { width:100%; padding:16px; border-radius:12px; border:none; font-size:15px; font-weight:700; font-family:'Noto Sans JP',sans-serif; cursor:pointer; transition:all 0.15s; letter-spacing:1px; }
-  .btn-primary { background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#fff; }
-  .btn-primary:active { transform:scale(0.97); opacity:0.9; }
-  .btn-outline { background:transparent; border:1px solid var(--border); color:var(--muted); margin-top:8px; font-size:13px; }
+  .form-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;}
+  .form-title{font-size:13px;font-weight:700;color:var(--accent);margin-bottom:14px;}
+  .input-group{margin-bottom:12px;}
+  .input-group label{display:block;font-size:11px;color:var(--muted);margin-bottom:5px;}
+  .input-group input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:13px;color:var(--text);font-size:16px;font-family:'Noto Sans JP',sans-serif;outline:none;transition:border-color 0.2s;}
+  .input-group input:focus{border-color:var(--accent);}
+  .btn{width:100%;padding:14px;border-radius:12px;border:none;font-size:15px;font-weight:700;font-family:'Noto Sans JP',sans-serif;cursor:pointer;transition:all 0.2s;letter-spacing:1px;}
+  .btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;}
+  .btn-primary:active{transform:scale(0.97);}
+  .btn-outline{background:transparent;border:1px solid var(--border);color:var(--muted);margin-top:8px;font-size:13px;}
 
   /* 履歴 */
-  .month-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-bottom:14px; }
-  .mg-btn { padding:8px 4px; border-radius:8px; border:1px solid var(--border); background:var(--surface2); color:var(--muted); font-size:11px; cursor:pointer; font-family:'Noto Sans JP',sans-serif; font-weight:700; transition:all 0.2s; text-align:center; }
-  .mg-btn.active { background:var(--accent); color:#fff; border-color:var(--accent); }
-  .mg-btn.has-data { border-color:var(--accent2); color:var(--accent2); }
-  .mg-btn.active.has-data { background:var(--accent); color:#fff; }
-  .month-nav { display:flex; align-items:center; justify-content:space-between; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:10px 14px; margin-bottom:12px; }
-  .month-nav .nav-btn { background:none; border:none; color:var(--accent); font-size:24px; cursor:pointer; padding:0 8px; line-height:1; }
-  .month-nav .month-title { font-family:'Bebas Neue',cursive; font-size:24px; color:var(--text); letter-spacing:2px; }
-  .month-summary { background:var(--surface2); border-radius:10px; padding:10px 14px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; }
-  .month-summary .ms-label { font-size:11px; color:var(--muted); }
-  .month-summary .ms-val { font-family:'Bebas Neue',cursive; font-size:22px; color:var(--accent2); }
-  .history-item { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:14px 16px; margin-bottom:10px; display:flex; align-items:center; gap:14px; animation:fadeIn 0.3s ease; }
-  @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
-  .car-badge { background:var(--surface2); border:1px solid var(--accent); border-radius:8px; padding:6px 10px; text-align:center; min-width:64px; }
-  .car-badge .make { font-size:11px; color:var(--accent); font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:60px; }
-  .car-badge .plate { font-family:'Bebas Neue',cursive; font-size:20px; color:var(--text); line-height:1; }
-  .history-info { flex:1; }
-  .history-info .date { font-size:10px; color:var(--muted); margin-bottom:2px; }
-  .history-price { font-family:'Bebas Neue',cursive; font-size:24px; color:var(--accent2); }
-  .history-price .yen { font-size:14px; color:var(--muted); }
-  .delete-btn { background:none; border:none; color:var(--muted); font-size:20px; cursor:pointer; padding:6px 8px; }
-  .empty-state { text-align:center; padding:40px 20px; color:var(--muted); font-size:13px; }
-  .empty-state .icon { font-size:40px; margin-bottom:12px; }
+  .month-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px;}
+  .mg-btn{padding:7px 4px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);font-size:11px;cursor:pointer;font-family:'Noto Sans JP',sans-serif;font-weight:700;transition:all 0.2s;text-align:center;}
+  .mg-btn.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+  .mg-btn.has-data{border-color:var(--accent2);color:var(--accent2);}
+  .month-nav{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px 14px;margin-bottom:12px;}
+  .month-nav .nav-btn{background:none;border:none;color:var(--accent);font-size:24px;cursor:pointer;padding:0 8px;}
+  .month-nav .month-title{font-family:'Bebas Neue',cursive;font-size:22px;color:var(--text);letter-spacing:2px;}
+  .month-summary{background:var(--surface2);border-radius:10px;padding:10px 14px;margin-bottom:12px;display:flex;justify-content:space-between;}
+  .month-summary .ms-label{font-size:11px;color:var(--muted);}
+  .month-summary .ms-val{font-family:'Bebas Neue',cursive;font-size:20px;color:var(--accent2);}
+  .history-item{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:12px;animation:fadeIn 0.3s ease;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+  .car-badge{background:var(--surface2);border:1px solid var(--accent);border-radius:8px;padding:6px 8px;text-align:center;min-width:60px;}
+  .car-badge .make{font-size:10px;color:var(--accent);font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:56px;}
+  .car-badge .plate{font-family:'Bebas Neue',cursive;font-size:18px;color:var(--text);line-height:1;}
+  .history-info{flex:1;}
+  .history-info .date{font-size:10px;color:var(--muted);margin-bottom:2px;}
+  .history-price{font-family:'Bebas Neue',cursive;font-size:22px;color:var(--accent2);}
+  .history-price .yen{font-size:13px;color:var(--muted);}
+  .delete-btn{background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:6px;}
+  .empty-state{text-align:center;padding:40px 20px;color:var(--muted);font-size:13px;}
+  .empty-state .icon{font-size:36px;margin-bottom:10px;}
 
   /* 目標 */
-  .goal-setup { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:20px; margin-bottom:16px; }
-  .period-selector { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:16px; }
-  .period-btn { padding:12px; border-radius:10px; border:1px solid var(--border); background:var(--surface2); color:var(--muted); font-size:12px; cursor:pointer; font-family:'Noto Sans JP',sans-serif; font-weight:700; transition:all 0.2s; }
-  .period-btn.active { background:var(--accent); color:#fff; border-color:var(--accent); }
-  .reset-btn { background:transparent; border:1px solid var(--red); color:var(--red); border-radius:10px; padding:12px; width:100%; font-size:12px; cursor:pointer; font-family:'Noto Sans JP',sans-serif; margin-top:8px; }
+  .goal-setup{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;}
+  .period-selector{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;}
+  .period-btn{padding:11px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);font-size:12px;cursor:pointer;font-family:'Noto Sans JP',sans-serif;font-weight:700;transition:all 0.2s;}
+  .period-btn.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+  .reset-btn{background:transparent;border:1px solid var(--red);color:var(--red);border-radius:10px;padding:11px;width:100%;font-size:12px;cursor:pointer;font-family:'Noto Sans JP',sans-serif;margin-top:8px;}
 
-  /* インストール誘導バナー */
-  #install-banner {
-    display:none; position:fixed; bottom:calc(var(--safe-bot) + 10px); left:16px; right:16px;
-    background:#1a1a20; border:1px solid var(--accent); border-radius:14px;
-    padding:14px 16px; z-index:999; box-shadow:0 4px 24px rgba(0,0,0,0.6);
-  }
-  #install-banner .ib-title { font-size:13px; font-weight:700; color:var(--accent); margin-bottom:4px; }
-  #install-banner .ib-sub { font-size:11px; color:var(--muted); margin-bottom:10px; }
-  #install-banner .ib-btns { display:flex; gap:8px; }
-  #install-banner .ib-install { flex:1; padding:10px; background:var(--accent); color:#fff; border:none; border-radius:9px; font-size:13px; font-weight:700; cursor:pointer; font-family:'Noto Sans JP',sans-serif; }
-  #install-banner .ib-close { padding:10px 14px; background:transparent; border:1px solid var(--border); color:var(--muted); border-radius:9px; font-size:12px; cursor:pointer; font-family:'Noto Sans JP',sans-serif; }
+  /* 接続状態 */
+  .online-dot{width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block;margin-right:4px;}
+  .offline-dot{width:8px;height:8px;border-radius:50%;background:var(--red);display:inline-block;margin-right:4px;}
 </style>
 </head>
 <body>
+
+<!-- 名前入力画面 -->
+<div id="name-screen">
+  <div class="name-logo">⚙ BANKIN PRO</div>
+  <div class="name-sub">鈑金塗装 工賃トラッカー</div>
+  <input class="name-input" id="name-input" type="text" placeholder="あなたの名前を入力" maxlength="10" autocomplete="off"/>
+  <button class="name-btn" onclick="startApp()">はじめる</button>
+</div>
+
 <header>
-  <div class="logo">⚙ BANKIN PRO</div>
-  <div class="sub">鈑金塗装 工賃トラッカー</div>
+  <div class="header-row">
+    <div>
+      <div class="logo">⚙ BANKIN PRO</div>
+      <div class="sub"><span id="connect-dot" class="online-dot"></span><span id="connect-status">接続中...</span></div>
+    </div>
+    <div class="user-badge" id="user-badge" onclick="changeName()">👤 ---</div>
+  </div>
 </header>
 <div class="tabs">
   <div class="tab active" onclick="showTab('dash')">📊 ダッシュ</div>
@@ -153,6 +143,7 @@
   <div class="tab" onclick="showTab('goal')">🎯 目標</div>
 </div>
 <div class="pages">
+
   <!-- ダッシュボード -->
   <div id="page-dash" class="page active">
     <div class="goal-card">
@@ -168,18 +159,11 @@
       <div class="stat-box"><div class="label">今月の台数</div><div class="value" id="month-count">0</div><div class="unit">台</div></div>
     </div>
     <div class="today-label" id="today-label"></div>
-    <div class="chart-card">
-      <div class="chart-title">📈 月別達成グラフ</div>
-      <div class="chart-toggle">
-        <button class="ct-btn active" id="ct-bar" onclick="setChartType('bar')">棒グラフ</button>
-        <button class="ct-btn" id="ct-line" onclick="setChartType('line')">折れ線</button>
-      </div>
-      <canvas id="achieveChart" height="200"></canvas>
-      <div class="legend">
-        <div class="legend-item"><div class="legend-dot" style="background:#2ecc71"></div>達成</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#ff6b2b"></div>未達</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#555;border:1px dashed #888"></div>目標</div>
-      </div>
+
+    <!-- チームランキング -->
+    <div class="team-card">
+      <div class="team-title">👥 チーム今月ランキング</div>
+      <div id="team-list"><div class="empty-state"><div class="icon">👥</div>まだデータがありません</div></div>
     </div>
   </div>
 
@@ -221,67 +205,96 @@
       </div>
       <div class="input-group"><label id="goal-label-text">目標金額（日次）</label><input type="number" id="input-goal" placeholder="例：200000" inputmode="numeric"/></div>
       <button class="btn btn-primary" onclick="saveGoal()">目標を保存</button>
-      <button class="reset-btn" onclick="resetAll()">⚠ 全データをリセット</button>
+      <button class="reset-btn" onclick="resetMyData()">⚠ 自分のデータをリセット</button>
     </div>
   </div>
 </div>
 
-<!-- インストールバナー -->
-<div id="install-banner">
-  <div class="ib-title">📲 ホーム画面に追加できます</div>
-  <div class="ib-sub">アプリのようにすぐ起動できます</div>
-  <div class="ib-btns">
-    <button class="ib-install" id="ib-install-btn">ホーム画面に追加</button>
-    <button class="ib-close" onclick="document.getElementById('install-banner').style.display='none'">後で</button>
-  </div>
-</div>
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <script>
-  // PWA: Service Worker登録
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js').catch(()=>{});
-  }
+  // ===== Firebase設定 =====
+  const firebaseConfig = {
+    apiKey: "AIzaSyD08SPozLYgDp0Ash0Rg-LpAsl2A-bsRzw",
+    authDomain: "bankin-pro.firebaseapp.com",
+    databaseURL: "https://bankin-pro-default-rtdb.firebaseio.com",
+    projectId: "bankin-pro",
+    storageBucket: "bankin-pro.firebasestorage.app",
+    messagingSenderId: "367574474550",
+    appId: "1:367574474550:web:e7bc2f9c247041191189d97"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
 
-  // PWA: インストールバナー
-  let deferredPrompt = null;
-  window.addEventListener('beforeinstallprompt', e => {
-    e.preventDefault();
-    deferredPrompt = e;
-    document.getElementById('install-banner').style.display = 'block';
-  });
-  document.getElementById('ib-install-btn').addEventListener('click', () => {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.then(() => {
-        deferredPrompt = null;
-        document.getElementById('install-banner').style.display = 'none';
-      });
-    }
-  });
-  window.addEventListener('appinstalled', () => {
-    document.getElementById('install-banner').style.display = 'none';
-  });
-
-  let records = JSON.parse(localStorage.getItem('bankin_records') || '[]');
+  // ===== 変数 =====
+  let myName = localStorage.getItem('bankin_name') || '';
   let goal = JSON.parse(localStorage.getItem('bankin_goal') || '{"amount":0,"period":"day"}');
   let currentPeriod = goal.period || 'day';
-  let chartType = 'bar';
-  let achieveChart = null;
-
+  let allRecords = {};
   const nowD = new Date();
   let histYear = nowD.getFullYear();
   let histMonth = nowD.getMonth() + 1;
 
+  // ===== 起動時 =====
+  if (myName) {
+    document.getElementById('name-screen').style.display = 'none';
+    document.getElementById('user-badge').textContent = '👤 ' + myName;
+    initFirebase();
+  }
+
+  function startApp() {
+    const name = document.getElementById('name-input').value.trim();
+    if (!name) { alert('名前を入力してください'); return; }
+    myName = name;
+    localStorage.setItem('bankin_name', myName);
+    document.getElementById('name-screen').style.display = 'none';
+    document.getElementById('user-badge').textContent = '👤 ' + myName;
+    initFirebase();
+  }
+
+  function changeName() {
+    const name = prompt('名前を変更してください', myName);
+    if (name && name.trim()) {
+      myName = name.trim();
+      localStorage.setItem('bankin_name', myName);
+      document.getElementById('user-badge').textContent = '👤 ' + myName;
+    }
+  }
+
+  function initFirebase() {
+    // 接続状態監視
+    db.ref('.info/connected').on('value', snap => {
+      const connected = snap.val();
+      document.getElementById('connect-dot').className = connected ? 'online-dot' : 'offline-dot';
+      document.getElementById('connect-status').textContent = connected ? 'オンライン' : 'オフライン';
+    });
+
+    // データ監視（リアルタイム）
+    db.ref('records').on('value', snap => {
+      allRecords = snap.val() || {};
+      updateDashboard();
+      renderHistory();
+      renderTeam();
+    });
+  }
+
+  // ===== ユーティリティ =====
   function formatYen(n) { return parseInt(n).toLocaleString('ja-JP'); }
   function today() { return new Date().toISOString().slice(0,10); }
   function thisMonth() { return new Date().toISOString().slice(0,7); }
   function getMonthKey(y,m) { return y+'-'+(String(m).padStart(2,'0')); }
 
-  function getFiltered(period) {
+  function getMyRecords() {
+    if (!allRecords[myName]) return [];
+    return Object.values(allRecords[myName]);
+  }
+
+  function getMyFiltered(period) {
     const t=today(), m=thisMonth();
     const weekAgo=new Date(Date.now()-7*24*60*60*1000).toISOString().slice(0,10);
-    return records.filter(r=>{
+    return getMyRecords().filter(r=>{
       if(period==='day') return r.date===t;
       if(period==='week') return r.date>=weekAgo;
       if(period==='month') return r.date.startsWith(m);
@@ -289,96 +302,17 @@
     });
   }
 
-  function buildChartData() {
-    const year=nowD.getFullYear();
-    const labels=[],actuals=[],goals=[];
-    const monthlyGoal = goal.period==='month' ? goal.amount :
-                        goal.period==='day'   ? goal.amount*22 :
-                        goal.period==='week'  ? goal.amount*4 : 0;
-    for(let m=1;m<=12;m++){
-      labels.push(m+'月');
-      const key=getMonthKey(year,m);
-      actuals.push(records.filter(r=>r.date.startsWith(key)).reduce((a,r)=>a+r.price,0));
-      goals.push(monthlyGoal);
-    }
-    return {labels,actuals,goals};
-  }
-
-  function renderChart() {
-    const {labels,actuals,goals}=buildChartData();
-    const ctx=document.getElementById('achieveChart').getContext('2d');
-    const currentM=new Date().getMonth()+1;
-    const barColors=actuals.map((v,i)=>{
-      if(i+1>currentM) return 'rgba(60,60,70,0.5)';
-      return v>=goals[i]&&goals[i]>0 ? 'rgba(46,204,113,0.85)' : 'rgba(255,107,43,0.85)';
-    });
-    if(achieveChart) achieveChart.destroy();
-    achieveChart=new Chart(ctx,{
-      type:chartType==='line'?'line':'bar',
-      data:{
-        labels,
-        datasets:[
-          {
-            label:'実績', data:actuals,
-            backgroundColor:chartType==='bar'?barColors:'rgba(255,107,43,0.15)',
-            borderColor:chartType==='bar'?barColors.map(c=>c.replace('0.85','1')):'#ff6b2b',
-            borderWidth:chartType==='bar'?1:2,
-            borderRadius:chartType==='bar'?6:0,
-            fill:chartType==='line', tension:0.4,
-            pointBackgroundColor:actuals.map((v,i)=>v>=goals[i]&&goals[i]>0?'#2ecc71':'#ff6b2b'),
-            pointRadius:chartType==='line'?4:0,
-          },
-          {
-            label:'目標', data:goals, type:'line',
-            borderColor:'rgba(200,200,200,0.35)', borderDash:[6,4],
-            borderWidth:2, pointRadius:0, fill:false, tension:0,
-          }
-        ]
-      },
-      options:{
-        responsive:true,
-        animation:{duration:500,easing:'easeOutQuart'},
-        plugins:{
-          legend:{display:false},
-          tooltip:{
-            backgroundColor:'#222228', titleColor:'#ff6b2b',
-            bodyColor:'#f0f0f0', borderColor:'#2e2e36', borderWidth:1,
-            callbacks:{
-              label:ctx=>ctx.datasetIndex===0?' 実績: ¥'+formatYen(ctx.parsed.y):' 目標: ¥'+formatYen(ctx.parsed.y),
-              afterBody:items=>{
-                const v=actuals[items[0].dataIndex],g=goals[items[0].dataIndex];
-                if(!g) return[];
-                return['達成率:'+Math.round((v/g)*100)+'%','差額:'+(v-g>=0?'+':'')+formatYen(v-g)+'円'];
-              }
-            }
-          }
-        },
-        scales:{
-          x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#888',font:{size:10}}},
-          y:{grid:{color:'rgba(255,255,255,0.06)'},ticks:{color:'#888',font:{size:10},callback:v=>v>=10000?(v/10000)+'万':v},beginAtZero:true}
-        }
-      }
-    });
-  }
-
-  function setChartType(type) {
-    chartType=type;
-    document.getElementById('ct-bar').className='ct-btn'+(type==='bar'?' active':'');
-    document.getElementById('ct-line').className='ct-btn'+(type==='line'?' active':'');
-    renderChart();
-  }
-
+  // ===== ダッシュボード =====
   function updateDashboard() {
-    const tR=getFiltered('day'),mR=getFiltered('month');
+    const tR=getMyFiltered('day'), mR=getMyFiltered('month');
     document.getElementById('today-total').textContent=formatYen(tR.reduce((a,r)=>a+r.price,0));
     document.getElementById('month-total').textContent=formatYen(mR.reduce((a,r)=>a+r.price,0));
     document.getElementById('today-count').textContent=tR.length;
     document.getElementById('month-count').textContent=mR.length;
     const now=new Date();
-    document.getElementById('today-label').textContent=
-      now.getFullYear()+'年'+(now.getMonth()+1)+'月'+now.getDate()+'日（'+['日','月','火','水','木','金','土'][now.getDay()]+'）';
+    document.getElementById('today-label').textContent=now.getFullYear()+'年'+(now.getMonth()+1)+'月'+now.getDate()+'日（'+['日','月','火','水','木','金','土'][now.getDay()]+'）';
     const g=goal.amount||0;
-    const pSum=getFiltered(goal.period).reduce((a,r)=>a+r.price,0);
+    const pSum=getMyFiltered(goal.period).reduce((a,r)=>a+r.price,0);
     const remain=g-pSum, pct=g>0?Math.min((pSum/g)*100,100):0;
     const cdEl=document.getElementById('countdown-main');
     const subEl=document.getElementById('countdown-sub');
@@ -387,34 +321,63 @@
     if(g===0){cdEl.textContent='¥---';cdEl.className='countdown-display';subEl.textContent='目標を設定してください';bar.style.width='0%';bar.className='progress-bar';}
     else if(remain>0){cdEl.textContent='¥'+formatYen(remain);cdEl.className='countdown-display';subEl.textContent=pl+'目標まで残り | 達成率 '+Math.round(pct)+'%';bar.style.width=pct+'%';bar.className='progress-bar';}
     else{cdEl.textContent='🎉 達成！';cdEl.className='countdown-display over';subEl.textContent='¥'+formatYen(Math.abs(remain))+' オーバー達成！';bar.style.width='100%';bar.className='progress-bar over';}
-    renderChart();
   }
 
+  // ===== チームランキング =====
+  function renderTeam() {
+    const m = thisMonth();
+    const members = [];
+    for (const name in allRecords) {
+      const recs = Object.values(allRecords[name]);
+      const sum = recs.filter(r=>r.date.startsWith(m)).reduce((a,r)=>a+r.price,0);
+      const count = recs.filter(r=>r.date.startsWith(m)).length;
+      const g = goal.amount||0;
+      const mg = goal.period==='month'?g:goal.period==='day'?g*22:goal.period==='week'?g*4:0;
+      members.push({name, sum, count, achieved: mg>0 && sum>=mg});
+    }
+    members.sort((a,b)=>b.sum-a.sum);
+    const el = document.getElementById('team-list');
+    if (members.length===0) { el.innerHTML='<div class="empty-state"><div class="icon">👥</div>まだデータがありません</div>'; return; }
+    const rankColors = ['gold','silver','bronze'];
+    el.innerHTML = members.map((m,i)=>`
+      <div class="team-item">
+        <div class="team-rank ${rankColors[i]||''}">${i+1}</div>
+        <div class="team-name ${m.name===myName?'me':''}">${m.name===myName?'👤 ':''} ${m.name}</div>
+        <div>
+          <div class="team-amount">¥${formatYen(m.sum)}</div>
+          ${m.achieved?'<div class="team-achieved">✅ 達成</div>':''}
+        </div>
+      </div>`).join('');
+  }
+
+  // ===== 履歴 =====
   function renderMonthGrid() {
     const grid=document.getElementById('month-grid');
+    const myRecs=getMyRecords();
     grid.innerHTML=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'].map((label,i)=>{
       const m=i+1, key=getMonthKey(histYear,m);
-      const hasData=records.some(r=>r.date.startsWith(key));
+      const hasData=myRecs.some(r=>r.date.startsWith(key));
       const isActive=(m===histMonth);
       let cls='mg-btn'; if(isActive)cls+=' active'; if(hasData&&!isActive)cls+=' has-data';
-      return `<button class="${cls}" onclick="selectHistoryMonth(${m})">${label}</button>`;
+      return`<button class="${cls}" onclick="selectHistoryMonth(${m})">${label}</button>`;
     }).join('');
   }
 
   function renderHistory() {
     const key=getMonthKey(histYear,histMonth);
     document.getElementById('history-month-title').textContent=histYear+'年'+histMonth+'月';
-    const filtered=records.filter(r=>r.date.startsWith(key));
+    const myRecs=getMyRecords();
+    const filtered=myRecs.filter(r=>r.date.startsWith(key));
     document.getElementById('history-month-sum').textContent='¥'+formatYen(filtered.reduce((a,r)=>a+r.price,0));
     document.getElementById('history-month-count').textContent=filtered.length+'台';
     const el=document.getElementById('history-list');
     if(filtered.length===0){el.innerHTML='<div class="empty-state"><div class="icon">🚗</div>'+histMonth+'月の登録はありません</div>';renderMonthGrid();return;}
-    const sorted=filtered.map(r=>({...r,origIdx:records.indexOf(r)})).sort((a,b)=>(b.date+b.time).localeCompare(a.date+a.time));
+    const sorted=filtered.map(r=>({...r})).sort((a,b)=>(b.date+b.time).localeCompare(a.date+a.time));
     el.innerHTML=sorted.map(r=>`
       <div class="history-item">
         <div class="car-badge"><div class="make">${r.make}</div><div class="plate">${r.plate}</div></div>
         <div class="history-info"><div class="date">${r.date} ${r.time}</div><div class="history-price"><span class="yen">¥</span>${formatYen(r.price)}</div></div>
-        <button class="delete-btn" onclick="deleteRecord(${r.origIdx})">✕</button>
+        <button class="delete-btn" onclick="deleteRecord('${r.id}')">✕</button>
       </div>`).join('');
     renderMonthGrid();
   }
@@ -422,22 +385,24 @@
   function selectHistoryMonth(m){histMonth=m;renderHistory();}
   function changeHistoryMonth(d){histMonth+=d;if(histMonth<1){histMonth=12;histYear--;}if(histMonth>12){histMonth=1;histYear++;}renderHistory();}
 
+  // ===== 工賃入力 =====
   function addRecord() {
+    if (!myName) { alert('名前を入力してください'); return; }
     const make=document.getElementById('input-make').value.trim();
     const plate=document.getElementById('input-plate').value.trim();
     const price=parseInt(document.getElementById('input-price').value);
     if(!make||!plate||isNaN(price)||price<=0){alert('車種・ナンバー・工賃をすべて入力してください');return;}
     const now=new Date();
-    records.push({make,plate,price,date:now.toISOString().slice(0,10),time:now.toTimeString().slice(0,5)});
-    localStorage.setItem('bankin_records',JSON.stringify(records));
-    clearForm(); updateDashboard(); showTab('dash');
+    const id = Date.now().toString();
+    const record = {id, make, plate, price, date:now.toISOString().slice(0,10), time:now.toTimeString().slice(0,5), name:myName};
+    db.ref('records/'+myName+'/'+id).set(record);
+    clearForm();
+    showTab('dash');
   }
 
-  function deleteRecord(idx){
+  function deleteRecord(id) {
     if(!confirm('削除しますか？'))return;
-    records.splice(idx,1);
-    localStorage.setItem('bankin_records',JSON.stringify(records));
-    updateDashboard(); renderHistory();
+    db.ref('records/'+myName+'/'+id).remove();
   }
 
   function clearForm(){
@@ -446,6 +411,7 @@
     document.getElementById('input-price').value='';
   }
 
+  // ===== 目標 =====
   function setPeriod(p){
     currentPeriod=p;
     ['day','week','month'].forEach(x=>{document.getElementById('period-'+x).className='period-btn'+(x===p?' active':'');});
@@ -458,15 +424,14 @@
     if(isNaN(amount)||amount<=0){alert('目標金額を入力してください');return;}
     goal={amount,period:currentPeriod};
     localStorage.setItem('bankin_goal',JSON.stringify(goal));
-    updateDashboard(); showTab('dash');
+    updateDashboard();
+    renderTeam();
+    showTab('dash');
   }
 
-  function resetAll(){
-    if(!confirm('全データを削除しますか？'))return;
-    records=[];goal={amount:0,period:'day'};
-    localStorage.setItem('bankin_records','[]');
-    localStorage.setItem('bankin_goal',JSON.stringify(goal));
-    updateDashboard(); renderHistory();
+  function resetMyData(){
+    if(!confirm('自分のデータを全部削除しますか？'))return;
+    db.ref('records/'+myName).remove();
   }
 
   function showTab(name){
@@ -475,11 +440,7 @@
     document.getElementById('page-'+name).classList.add('active');
     ['dash','add','history','goal'].forEach((t,i)=>{if(t===name)document.querySelectorAll('.tab')[i].classList.add('active');});
     if(name==='history')renderHistory();
-    if(name==='dash')renderChart();
   }
-
-  updateDashboard();
-  renderMonthGrid();
 </script>
 </body>
 </html>
